@@ -4,6 +4,37 @@ All changes are listed in plain language, newest first.
 
 ---
 
+## Step 3 — Measured analysis (2026-11-04)
+
+- Added `app/analysis.py` with `analyze_pptx(path) -> dict`.
+- Returns structured JSON for every slide: dimensions, shape positions, text, fonts, alt text.
+- Implements 13 measured checks across two levels:
+
+  **Per-slide checks** (11):
+  - `object_off_slide` — shape bounding box extends outside slide boundary
+  - `overlapping_objects` — two shapes' bounding boxes intersect
+  - `missing_slide_title` — no text in the top 15% of the slide
+  - `missing_alt_text` — picture shape has no alt text attribute
+  - `small_text` — font run at or below 12pt
+  - `empty_placeholder` — template placeholder with no content
+  - `text_overflow` — fixed-size text box estimated to exceed its capacity (confidence: low)
+  - `reading_order` — XML order does not match top-to-bottom visual order
+  - `crowded_slide` — more than 8 shapes on a slide
+  - `almost_aligned` — two nearby shapes whose edges are within 1–10pt of aligning
+  - `low_contrast` — text/background contrast below WCAG 2.2 AA (4.5:1 normal, 3:1 large)
+
+  **Deck-level checks** (2):
+  - `duplicate_title` — the same title text appears on more than one slide
+  - `many_fonts` — more than 3 distinct fonts in the deck
+
+- Added `tests/test_analysis.py` — 37 tests; each fixture triggers exactly one check,
+  `clean.pptx` triggers none.
+- Fixed `tests/create_fixtures.py` — narrowed clean body box to prevent false overlap with image.
+- Fixed `_bg_color()` — text boxes have `MSO_FILL_TYPE.BACKGROUND` (not `None`); both are now
+  correctly treated as transparent (white background).
+
+---
+
 ## Step 2 — Test fixtures (2026-11-04)
 
 - Added `tests/create_fixtures.py` — script that generates all 10 fixture PPTX files.

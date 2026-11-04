@@ -89,7 +89,7 @@ def build_clean() -> Presentation:
     slide = blank_slide(prs)
     add_title_box(slide, "Quarterly Results — Q3 2024")
 
-    body = slide.shapes.add_textbox(Inches(0.5), Inches(1.4), Inches(8), Inches(3.5))
+    body = slide.shapes.add_textbox(Inches(0.5), Inches(1.4), Inches(6.0), Inches(3.5))
     tf = body.text_frame
     tf.word_wrap = True
     run = tf.paragraphs[0].add_run()
