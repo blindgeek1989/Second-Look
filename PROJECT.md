@@ -36,7 +36,9 @@ HTML, CSS, JavaScript, and ARIA. Explain your work in plain language. Use words 
 3. Lead with the answer. Keep responses short by default, and let the user ask for more detail.
 4. Separate measured facts from AI judgment. Label each finding as "Measured" or "AI opinion."
 5. Include a confidence level for AI opinions. Never present a guess as a fact.
-6. Tell users that the slide images come from LibreOffice and may differ slightly from PowerPoint.
+6. When using the LibreOffice adapter, tell users that slide images come from LibreOffice
+   and may differ slightly from PowerPoint. Update this disclaimer if a different rendering
+   adapter is used in future.
 7. Never overwrite the original file. Always create a new copy.
 8. Do not describe a slide as visually perfect or guarantee that a file is accessible.
 9. Treat every uploaded file as confidential.
@@ -53,12 +55,40 @@ HTML, CSS, JavaScript, and ARIA. Explain your work in plain language. Use words 
 - Python, FastAPI, Jinja templates, semantic HTML, CSS
 - Only the JavaScript needed for progressive enhancement
 - python-pptx to read PowerPoint files
-- LibreOffice to convert slides to PDF
 - PyMuPDF to convert PDF pages to images
 - Anthropic API for visual review
 - pytest for automated tests
 - axe-core for automated accessibility checks
 - No user accounts, payments, mobile app, or database yet
+
+### Slide rendering interface
+
+Slide rendering must sit behind a defined interface so the rendering method can be
+swapped without touching the analysis module, the AI review, or the web interface.
+
+The interface accepts a PPTX file path and a session output directory. It returns a
+list of image file paths, one per slide, in order. That is the only contract the rest
+of the application depends on.
+
+**Pilot adapter — LibreOffice**
+LibreOffice converts the PPTX to PDF; PyMuPDF converts each PDF page to a PNG.
+This is the only adapter that will be built before the pilot.
+
+**Future adapters (do not build yet)**
+1. PowerPoint Office Add-in — renders slides in the user's locally installed PowerPoint.
+   This avoids server-side Office automation entirely.
+2. Microsoft Graph API — converts files stored in OneDrive or SharePoint without
+   requiring Office to be installed on the server.
+3. Google Slides API — renders native Google Slides files. If this adapter is ever
+   built, request only the `drive.file` permission and require the user to choose the
+   file themselves. Do not request broad Drive access.
+
+**Constraints**
+- Do not install Microsoft Office on a server.
+- Do not automate Microsoft Office on a server in any way.
+- Do not build the PowerPoint Add-in or the Google adapter yet.
+- Product rule 6 (tell users images come from LibreOffice) applies to the LibreOffice
+  adapter only. Update the disclaimer text if a different adapter is used in future.
 
 ---
 
@@ -92,6 +122,16 @@ Question box on deck and slide pages with starter questions and "More detail" op
 
 ### STEP 8: PILOT CHECKPOINT
 Pilot guide for five blind or low-vision professionals. Stop new features until pilot done.
+
+Include this question in the pilot feedback form:
+"Which tool do you mainly use to create or edit presentations?
+  a) PowerPoint desktop app
+  b) PowerPoint for the web (Office 365 / Microsoft 365 in a browser)
+  c) Google Slides
+  d) Other (please describe)"
+
+Use the answers to decide whether to build the Microsoft Graph or Google Slides adapter
+before the paid beta, and to prioritise which adapter to build first.
 
 ### STEP 9: ADD SAFE FIXES (after pilot approval)
 Let users request specific changes with confirmation before applying.
