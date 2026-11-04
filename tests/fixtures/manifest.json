@@ -1,0 +1,118 @@
+{
+  "clean.pptx": {
+    "description": "A well-formed single-slide deck. Title box, body text in high contrast, one image with alt text. Used to verify checks do not produce false positives.",
+    "slide_count": 1,
+    "known_problems": []
+  },
+  "overlapping_objects.pptx": {
+    "description": "Two rectangles (Red Box, Blue Box) overlap between x=3.5\" and x=5.0\".",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "overlapping_objects",
+        "slide": 1,
+        "shapes": [
+          "Red Box",
+          "Blue Box"
+        ]
+      }
+    ]
+  },
+  "object_off_slide.pptx": {
+    "description": "Off-Slide Shape starts at x=11\", outside the 10\"-wide slide boundary.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "object_off_slide",
+        "slide": 1,
+        "shape": "Off-Slide Shape"
+      }
+    ]
+  },
+  "text_overflow.pptx": {
+    "description": "Text box with auto_size=NONE and dimensions 3\"×1.2\" contains ~250 words — far more than the box can display.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "text_overflow",
+        "slide": 1
+      }
+    ]
+  },
+  "small_text.pptx": {
+    "description": "Body run set to 8pt — below any recommended reading size.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "small_text",
+        "slide": 1,
+        "font_size_pt": 8
+      }
+    ]
+  },
+  "low_contrast.pptx": {
+    "description": "Body text color #BBBBBB on white (#FFFFFF) slide background. Measured contrast ratio ≈ 1.86:1; WCAG 2.2 AA requires 4.5:1.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "low_contrast",
+        "slide": 1,
+        "text_color": "#BBBBBB",
+        "bg_color": "#FFFFFF",
+        "contrast_ratio": 1.86
+      }
+    ]
+  },
+  "missing_alt_text.pptx": {
+    "description": "Picture shape 'Chart Image' has no descr attribute on its cNvPr element.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "missing_alt_text",
+        "slide": 1,
+        "shape": "Chart Image"
+      }
+    ]
+  },
+  "no_title.pptx": {
+    "description": "Single slide with only a body text box — no title element anywhere.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "missing_slide_title",
+        "slide": 1
+      }
+    ]
+  },
+  "reading_order.pptx": {
+    "description": "Three labeled boxes added to XML in the order Step3→Step1→Step2, but their visual positions are top-to-bottom Step1→Step2→Step3.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "reading_order",
+        "slide": 1,
+        "xml_order": [
+          "Step 3",
+          "Step 1",
+          "Step 2"
+        ],
+        "visual_order": [
+          "Step 1",
+          "Step 2",
+          "Step 3"
+        ]
+      }
+    ]
+  },
+  "crowded.pptx": {
+    "description": "Title box plus 12 data-item text boxes — 13 shapes on one slide.",
+    "slide_count": 1,
+    "known_problems": [
+      {
+        "check": "crowded_slide",
+        "slide": 1,
+        "shape_count": 13
+      }
+    ]
+  }
+}
