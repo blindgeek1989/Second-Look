@@ -4,6 +4,30 @@ All changes are listed in plain language, newest first.
 
 ---
 
+## Step 4 — Slide rendering interface (2026-11-04)
+
+- Added `app/rendering/` package with the rendering adapter pattern.
+- `app/rendering/base.py` — `SlideRenderer` abstract base class and four error types
+  (`RenderError`, `FileTooLargeError`, `CorruptFileError`, `ConversionTimeoutError`).
+  The rest of the application depends only on this interface.
+- `app/rendering/libreoffice.py` — `LibreOfficeRenderer` (the pilot adapter):
+  PPTX → PDF via LibreOffice headless, PDF → PNG per page via PyMuPDF at 2× scale (144 DPI).
+- `app/rendering/session.py` — `render_session()` context manager that creates a
+  unique temporary directory and deletes it on exit, even if an exception is raised.
+- `tests/test_rendering.py` — 23 tests:
+  - 8 pass without LibreOffice (session lifecycle + file validation).
+  - 15 skip gracefully with a clear install message until LibreOffice is present.
+- `pytest.ini` — added filter to suppress PyMuPDF SWIG deprecation warnings.
+
+**Step 4 is built but not yet complete.**
+The 15 skipped tests (render all fixtures, PNG validity, cleanup) must pass before
+this step is marked done. Install LibreOffice and set LIBREOFFICE_PATH in .env:
+
+  Windows: C:\\Program Files\\LibreOffice\\program\\soffice.exe
+  Download: https://www.libreoffice.org/download/libreoffice-still/
+
+---
+
 ## Step 3 — Measured analysis (2026-11-04)
 
 - Added `app/analysis.py` with `analyze_pptx(path) -> dict`.
